@@ -2,6 +2,11 @@
 import SocketServer
 
 # Copyright 2013 Abram Hindle, Eddie Antonio Santos
+#
+# server.py: I, Kevin Joseph De Asis have modified server.py,
+# which is a partially HTTP 1.1 compliant webserver and I have
+# added the class OtherHandler
+# Copyright 2015 Kevin Joseph De Asis 
 # 
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -33,13 +38,27 @@ class MyWebServer(SocketServer.BaseRequestHandler):
         self.data = self.request.recv(1024).strip()
         print ("Got a request of: %s\n" % self.data)
         self.request.sendall("OK")
+        
+class OtherHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
+    def do_GET(self):
+        if self.path == '/':
+            self.path = '/www/index.html'
+            
+        elif self.path == '/deep':
+            self.path = '/www/deep/index.html'
+        
+        else:
+            self.path = '/www'+self.path
+        return SimpleHTTPServer.SimpleHTTPRequestHandler.do_GET(self) 
 
 if __name__ == "__main__":
     HOST, PORT = "localhost", 8080
+    myRequestHandler = OtherHandler
+    
 
     SocketServer.TCPServer.allow_reuse_address = True
     # Create the server, binding to localhost on port 8080
-    server = SocketServer.TCPServer((HOST, PORT), MyWebServer)
+    server = SocketServer.TCPServer((HOST, PORT), myRequestHandler)
 
     # Activate the server; this will keep running until you
     # interrupt the program with Ctrl-C
