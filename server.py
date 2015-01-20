@@ -1,5 +1,7 @@
 #  coding: utf-8 
 import SocketServer
+import SimpleHTTPServer
+
 
 # Copyright 2013 Abram Hindle, Eddie Antonio Santos
 #
