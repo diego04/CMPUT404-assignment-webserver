@@ -28,6 +28,7 @@ import SimpleHTTPServer
 # Foundation; All Rights Reserved
 #
 # http://docs.python.org/2/library/socketserver.html
+# https://docs.python.org/2/library/simplehttpserver.html
 #
 # run: python freetests.py
 
@@ -43,6 +44,9 @@ class MyWebServer(SocketServer.BaseRequestHandler):
         
 class OtherHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
     def do_GET(self):
+        # using self.path class attribute idea provoked from
+        # http://stackoverflow.com/questions/10607621/a-simple-website-with-python-using-simplehttpserver-and-socketserver-how-to-onl
+        # by Susam Pal
         if self.path == '/':
             self.path = '/www/index.html'
             
